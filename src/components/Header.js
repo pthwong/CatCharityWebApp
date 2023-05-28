@@ -18,7 +18,7 @@ function Header() {
         <Tabs centered>
           {/* <Tab label="Home" component={Link} to="/" />
           <Tab label="Contact" component={Link} to="/contact" /> */}
-          <Tab label="Home" />
+          <Tab label="Home" component={Link} to="/" />
           <Tab label="Contact" />
         </Tabs>
         <Box sx={{ flexGrow: 1 }} />
