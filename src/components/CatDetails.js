@@ -64,7 +64,7 @@ function CatDetails() {
                   objectFit: 'cover',
                 }}
                 alt={catDetails.name}
-                src="https://source.unsplash.com/random?wallpapers" // assuming catDetails has a field named image containing the URL of the image
+                src="https://source.unsplash.com/random?wallpapers"
               />
             </Grid>
             <Grid item xs={12} md={6}>
