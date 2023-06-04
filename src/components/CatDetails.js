@@ -1,11 +1,8 @@
 import { async } from "q";
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import CircularProgress from "@mui/material/CircularProgress";
+import { ThemeProvider, Container, Box, Typography, CircularProgress, Button, Grid } from '@mui/material';
+import { createTheme } from "@mui/material/styles";
 
 import Header from "./Header";
 import Footer from "./Footer";
@@ -54,22 +51,46 @@ function CatDetails() {
           <CircularProgress />
         </Box>
       ) : (
-        <Container maxWidth="sm">
-          <Box sx={{ textAlign: "center", my: 4 }}>
-            <Typography variant="h2" component="h1" gutterBottom>
-              {catDetails.name}
-            </Typography>
-            <Typography variant="h5" color="text.secondary" paragraph>
-              Breed: {catDetails.breed}
-            </Typography>
-            <Typography variant="body1" color="text.primary" paragraph>
-              Age: {catDetails.age} years old
-            </Typography>
-            <Typography variant="body1" color="text.primary" paragraph>
-              Description: {catDetails.description}
-            </Typography>
-            {/* Add more cat details here */}
-          </Box>
+        <Container maxWidth="md" sx={{mt: 12, mb: 12}}>
+          <Grid container spacing={16}>
+            <Grid item xs={12} md={6}>
+              <Box
+                component="img"
+                sx={{
+                  height: '100%',
+                  width: '100%',
+                  maxWidth: '100%',
+                  borderRadius: '5px',
+                  objectFit: 'cover',
+                }}
+                alt={catDetails.name}
+                src="https://source.unsplash.com/random?wallpapers" // assuming catDetails has a field named image containing the URL of the image
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Box sx={{ my: 4 }}>
+                <Typography variant="h2" component="h1" gutterBottom>
+                  {catDetails.name}
+                </Typography>
+                <Typography variant="h5" color="text.secondary" paragraph>
+                  Breed: {catDetails.breed}
+                </Typography>
+                <Typography variant="body1" color="text.primary" paragraph>
+                  Color: {catDetails.color}
+                </Typography>
+                <Typography variant="body1" color="text.primary" paragraph>
+                  Age: {catDetails.age} years old
+                </Typography>
+                <Typography variant="body1" color="text.primary" paragraph>
+                  Description: {catDetails.description}
+                </Typography>
+
+                <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+                  Adopt {catDetails.name}
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
         </Container>
       )}
       <Footer />
