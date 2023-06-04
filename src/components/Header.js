@@ -11,7 +11,7 @@ function Header() {
   return (
     <AppBar position="sticky">
       <Toolbar>
-        <Typography variant="h6" color="inherit" noWrap>
+        <Typography variant="h6" color="inherit" noWrap component={Link} to="/" style={{ textDecoration: 'none' }}>
           The Pet Shelter
         </Typography>
         <Box sx={{ flexGrow: 1 }} />

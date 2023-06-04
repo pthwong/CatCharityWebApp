@@ -7,7 +7,7 @@ function Footer() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://web.whomethser.synology.me:7560">
+      <Link color="inherit" href="/">
         The Pet Shelter
       </Link>{" "}
       {2023}
