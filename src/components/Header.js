@@ -22,7 +22,7 @@ function Header() {
           <Tab label="Contact" />
         </Tabs>
         <Box sx={{ flexGrow: 1 }} />
-        <Button variant="contained" color="primary" size="big">
+        <Button variant="contained" color="primary" size="big" component={Link} to="/login">
           Login
         </Button>
       </Toolbar>
