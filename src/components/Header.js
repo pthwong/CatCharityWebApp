@@ -6,8 +6,35 @@ import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import { useEffect, useState } from "react";
 
 function Header() {
+
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+
+    setUserEmail(localStorage.getItem('userEmail'))
+
+
+  }, [userEmail]);
+
+  const handleLogout = () => {
+    // Ask the user to confirm the action
+    const confirm = window.confirm('Are you sure you want to logout the account?');
+    // Only proceed if the user confirmed the action
+    if (confirm) {
+      // Clear the user's information from localStorage
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('token');
+      // Clear the username from state
+      setUserEmail('');
+      // Show a message that the user has been logged out
+      alert('You have been logged out.');
+    }
+  }
+
+
   return (
     <AppBar position="sticky">
       <Toolbar>
@@ -22,9 +49,22 @@ function Header() {
           <Tab label="Contact" />
         </Tabs>
         <Box sx={{ flexGrow: 1 }} />
-        <Button variant="contained" color="primary" size="big" component={Link} to="/login">
-          Login
-        </Button>
+
+        {userEmail ? (
+          <>
+            <Typography variant="subtitle1" color="inherit">
+              Welcome, {userEmail}
+            </Typography>
+            <Button variant="contained" color="secondary" onClick={handleLogout}>
+              Logout
+            </Button>
+          </>
+        ) : (
+            <Button variant="contained" color="primary" size="big" component={Link} to="/login">
+            Login
+            </Button>
+        )}
+
       </Toolbar>
     </AppBar>
   );
