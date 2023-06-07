@@ -3,20 +3,19 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { Link } from "react-router-dom";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useEffect, useState } from "react";
+import { useNavigate, Link } from 'react-router-dom';
 
 function Header() {
 
   const [userEmail, setUserEmail] = useState('');
+  const navigate = useNavigate();
+
 
   useEffect(() => {
-
     setUserEmail(localStorage.getItem('userEmail'))
-
-
   }, [userEmail]);
 
   const handleLogout = () => {
@@ -27,10 +26,12 @@ function Header() {
       // Clear the user's information from localStorage
       localStorage.removeItem('userEmail');
       localStorage.removeItem('token');
+      localStorage.removeItem('role');
       // Clear the username from state
       setUserEmail('');
       // Show a message that the user has been logged out
       alert('You have been logged out.');
+      navigate('/');
     }
   }
 
