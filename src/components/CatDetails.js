@@ -12,6 +12,16 @@ function CatDetails() {
 
   const [catDetails, setCatDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+  const [userRole, setUserRole] = useState('');
+
+  useEffect(() => {
+    setUserEmail(localStorage.getItem('userEmail'));
+    setUserRole(localStorage.getItem('role'));
+
+  }, [userEmail, userRole]);
+
+
 
   useEffect(() => {
     const fetchCatData = async () => {
@@ -20,6 +30,7 @@ function CatDetails() {
       const data = await response.json();
       console.log(data.response);
       setCatDetails(data.response[0]);
+      console.log(data.response[0].catImgPath);
       setIsLoading(false);
     };
     fetchCatData();
@@ -52,7 +63,15 @@ function CatDetails() {
         </Box>
       ) : (
         <Container maxWidth="md" sx={{mt: 12, mb: 12}}>
-          <Grid container spacing={16}>
+          {!catDetails ? 
+          <>
+              <Typography variant="h2" component="h1" gutterBottom>
+                  Cannot find the cat
+                </Typography>
+          
+          </> : 
+          <>
+           <Grid container spacing={16}>
             <Grid item xs={12} md={6}>
               <Box
                 component="img"
@@ -64,7 +83,8 @@ function CatDetails() {
                   objectFit: 'cover',
                 }}
                 alt={catDetails.name}
-                src="https://source.unsplash.com/random?wallpapers"
+                //src="https://source.unsplash.com/random?wallpapers"
+                src={`/catImage/${catDetails.catImgPath}`}
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -85,12 +105,24 @@ function CatDetails() {
                   Description: {catDetails.description}
                 </Typography>
 
-                <Button variant="contained" color="primary" sx={{ mt: 2 }}>
-                  Adopt {catDetails.name}
-                </Button>
+                { userRole === 'cw' ?            
+                  <>
+                    <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+                      Adopt {catDetails.name}
+                    </Button> 
+
+                    <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+                      Edit information
+                    </Button> 
+                  </>
+                  : null
+                }
               </Box>
             </Grid>
           </Grid>
+          </>
+        }
+
         </Container>
       )}
       <Footer />

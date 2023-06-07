@@ -22,6 +22,16 @@ import Footer from "./Footer";
 function Homepage() {
   const [catInfo, setCatInfo] = useState([]);
 
+  const [userEmail, setUserEmail] = useState('');
+  const [userRole, setUserRole] = useState('');
+
+  useEffect(() => {
+    setUserEmail(localStorage.getItem('userEmail'));
+    setUserRole(localStorage.getItem('role'));
+
+  }, [userEmail, userRole]);
+
+
   useEffect(() => {
     fetch("/v1/cat")
       .then((response) => response.json())
@@ -109,6 +119,14 @@ function Homepage() {
               </Grid>
             ))}
           </Grid>
+          { userRole === 'cw' ?            
+             <>
+              <Button variant="contained" color="primary" sx={{ mt: 2 }} component={Link} to="/createCatDetails">
+                 Add Cat information
+              </Button> 
+             </>
+            : null
+          }
         </Container>
       </main>
       <Footer />
