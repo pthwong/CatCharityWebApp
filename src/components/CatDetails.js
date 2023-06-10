@@ -1,6 +1,6 @@
 import { async } from "q";
 import { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import { ThemeProvider, Container, Box, Typography, CircularProgress, Button, Grid } from '@mui/material';
 import { createTheme } from "@mui/material/styles";
 
@@ -83,7 +83,6 @@ function CatDetails() {
                   objectFit: 'cover',
                 }}
                 alt={catDetails.name}
-                //src="https://source.unsplash.com/random?wallpapers"
                 src={`/catImage/${catDetails.catImgPath}`}
               />
             </Grid>
@@ -92,7 +91,10 @@ function CatDetails() {
                 <Typography variant="h2" component="h1" gutterBottom>
                   {catDetails.name}
                 </Typography>
-                <Typography variant="h5" color="text.secondary" paragraph>
+                <Typography variant="body1" color="text.primary" paragraph>
+                  Gender: {catDetails.gender}
+                </Typography>
+                <Typography variant="body1" color="text.primary" paragraph>
                   Breed: {catDetails.breed}
                 </Typography>
                 <Typography variant="body1" color="text.primary" paragraph>
@@ -111,7 +113,7 @@ function CatDetails() {
                       Adopt {catDetails.name}
                     </Button> 
 
-                    <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+                    <Button variant="contained" color="primary" sx={{ mt: 2 }} component={Link} to={`/updateCatDetails/${catID}`} >
                       Edit information
                     </Button> 
                   </>
