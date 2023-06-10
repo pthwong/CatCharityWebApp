@@ -4,6 +4,7 @@ import { Box, Button, Grid, TextField, Typography,
         FormControl, Select, MenuItem, 
         InputLabel, Container } from '@mui/material';
 import Header from './Header';
+import Footer from './Footer';
 import {useNavigate, useParams} from 'react-router-dom';
 
 function UpdateCatForm() {
@@ -131,7 +132,7 @@ function UpdateCatForm() {
 
     if (response.ok) {
         alert('Cat details updated successfully!');
-        navigate('/');
+        navigate(`/cat/${catID}`);
     } else {
         setError('Failed to update cat details, please try again.');
     }
@@ -317,6 +318,7 @@ function UpdateCatForm() {
     }
       
       </Container>
+      <Footer />
     </ThemeProvider>
   );
 };

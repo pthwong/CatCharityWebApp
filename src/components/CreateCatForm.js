@@ -4,6 +4,7 @@ import { Box, Button, Grid, TextField, Typography,
         FormControl, Select, MenuItem, 
         InputLabel, Container } from '@mui/material';
 import Header from './Header';
+import Footer from './Footer';
 import {useNavigate} from 'react-router-dom';
 
 function CreateCatForm() {
@@ -220,6 +221,7 @@ function CreateCatForm() {
               onChange={(e) => setAge(e.target.value)}
               inputProps={{
                 min: 0,
+                max: 30,
               }}
               placeholder='Enter age of the cat here...'
               sx={{ margin: '12px' }}
@@ -289,7 +291,9 @@ function CreateCatForm() {
     }
       
       </Container>
+      <Footer />
     </ThemeProvider>
+    
   );
 };
 
