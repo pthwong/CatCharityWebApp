@@ -15,15 +15,64 @@ function CwRegPage() {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#ffffff",
+      },
+      secondary: {
+        main: "#000000",
+      },
+    },
+    components: {
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#000000',
+            },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#000000',
+            },
+          },
+          input: {
+            color: '#000000', // input text color
+          },
+        },
+      },
+      MuiInputLabel: {
+        styleOverrides: {
+          outlined: {
+            color: '#000000', // label color
+            '&.Mui-focused': {
+              color: '#000000', // label color when input is focused
+            },
+          },
+        },
+      },
+    },
+  });
   
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Regular expression pattern for password with at least 8 characters, one letter, and one symbol
+    const pwdRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+
   // Check that all fields are filled out
     if (!cwName || !cwEmail || !cwPassword1 || !signupCode || !cwPassword2 && cwPassword2 !== cwPassword1) {
         setError('All fields must be filled out');
         return;  // Stop here and don't send the form data to the server
+    } else if (!emailRegex.test(cwEmail)) {
+      setError("Invalid format of Email address.");
+      return;
+    } else if (!pwdRegex.test(cwPassword1) || !pwdRegex.test(cwPassword2) ) {
+        setError("Password must contain at least 8 characters, 1 letter, and 1 symbol");
+        return;
     } else if(cwPassword2 !== cwPassword1) {
         setError('Password not match');
         return; 
@@ -61,10 +110,6 @@ function CwRegPage() {
     setError('');
     
   };
-
-  const theme = createTheme({
-
-    });
 
   return (
     <ThemeProvider theme={theme}>
