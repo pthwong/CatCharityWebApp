@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Button, Grid, TextField, Typography, 
+import { Box, Button, Grid, TextField, Typography, 
         FormControl, Select, MenuItem, 
         InputLabel, Container } from '@mui/material';
 import Header from './Header';
@@ -121,7 +121,7 @@ function CreateCatForm() {
   return (
     <ThemeProvider theme={theme}>
       <Header />
-      <Container maxWidth="md" sx={{ mt: 2, mb: 2 }}>
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
     {userRole === 'cw' ? 
         <>
         <Typography
@@ -134,7 +134,56 @@ function CreateCatForm() {
               Add the details of the cat here
             </Typography>
       <form onSubmit={handleCreateCat} encType="multipart/form-data">
-        <Grid container spacing={2}>
+        <Grid container spacing={4}>
+              {/* Left Column for Image */}
+            <Grid item xs={12} md={6}>
+            <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '500px',
+                    border: '1px dashed gray',
+                    backgroundColor: '#f0f0f0',
+                  }}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    if (e.dataTransfer.items) {
+                      const file = e.dataTransfer.items[0].getAsFile();
+                      handleImageChange({ target: { files: [file] } });
+                    }
+                  }}
+                >
+               <input
+                accept="image/*"
+                id="contained-button-file"
+                type="file"
+                onChange={handleImageChange}
+                style={{ display: 'none' }}
+              />
+                {catImgPreview ? (
+                  <label htmlFor="contained-button-file">
+                    <img
+                      src={catImgPreview}
+                      alt="Preview"
+                      style={{ maxWidth: '50%', maxHeight: '50%', objectFit: 'contain' }}
+                    />
+                  </label>
+                ) : (
+                  <label htmlFor="contained-button-file">
+                    <Typography variant="body1">Drag / Click to upload Cat Image Here...</Typography>
+                  </label>
+                )}
+              </Box>
+{/* 
+              <label htmlFor="contained-button-file">
+                <Button variant="contained" color="primary" component="span" style={{ marginTop: '16px' }}>
+                  Upload Cat Image
+                </Button>
+              </label> */}
+            </Grid>
+          <Grid item xs={12} md={6}>
           <Grid item xs={12}>
             <TextField
               label="Cat Name"
@@ -143,10 +192,11 @@ function CreateCatForm() {
               value={catName}
               onChange={(e) => setCatName(e.target.value)}
               placeholder="Enter the name of the cat here..."
+              sx={{ margin: '12px' }}
             />
           </Grid>
           <Grid item xs={12}>
-          <FormControl variant="outlined" fullWidth>
+          <FormControl variant="outlined" fullWidth sx={{ margin: '12px' }}>
             <InputLabel id="gender-label">Gender</InputLabel>
             <Select
             labelId="gender-label"
@@ -172,6 +222,7 @@ function CreateCatForm() {
                 min: 0,
               }}
               placeholder='Enter age of the cat here...'
+              sx={{ margin: '12px' }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -182,6 +233,7 @@ function CreateCatForm() {
               fullWidth
               value={color}
               onChange={(e) => setColor(e.target.value)}
+              sx={{ margin: '12px' }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -192,6 +244,7 @@ function CreateCatForm() {
               fullWidth
               value={breed}
               onChange={(e) => setBreed(e.target.value)}
+              sx={{ margin: '12px' }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -204,26 +257,13 @@ function CreateCatForm() {
               onChange={(e) => setDescription(e.target.value)}
               multiline
               rows={4}
+              sx={{ margin: '12px' }}
             />
           </Grid>
-          
-          <Grid item xs={12}>
-            <input
-                accept="image/*"
-                id="contained-button-file"
-                type="file"
-                onChange={handleImageChange}
-                style={{ display: 'none' }}
-            />
-            <label htmlFor="contained-button-file">
-                <Button variant="contained" color="primary" component="span">
-                Upload Cat Image
-                </Button>
-            </label>
-            {catImgPreview && <img src={catImgPreview} style={{ maxWidth: '300px', maxHeight: '300px', objectFit: 'contain' }} alt="Preview" />}
-           </Grid>
            {error && <p>{error}</p>}
-          <Grid item xs={12}>
+
+        </Grid>
+        <Grid item xs={12}>
             <Button type="submit" variant="contained" color="primary" fullWidth>
               Add Cat
             </Button>
@@ -231,8 +271,7 @@ function CreateCatForm() {
         </Grid>
       </form>
         
-        </>
-    
+      </>
     : <>
         <Typography
               component="h3"
@@ -241,7 +280,7 @@ function CreateCatForm() {
               color="text.primary"
               gutterBottom
             >
-              Sorry, you did not have permissions to create the cat details!
+              Sorry, you did not have permission to create the cat details!
             </Typography>
     
     
