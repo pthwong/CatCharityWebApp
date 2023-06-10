@@ -6,6 +6,7 @@ import CwLoginPage from "./components/CwLoginPage";
 import PubLoginPage from "./components/PubLoginPage";
 import CwRegPage from "./components/CwRegPage";
 import CreateCatForm from "./components/CreateCatForm";
+import UpdateCatForm from "./components/UpdateCatForm";
 
 function AppRoutes() {
   return (
@@ -18,6 +19,7 @@ function AppRoutes() {
         <Route path="/pubLogin" element={<PubLoginPage />} />
         <Route path="/cat/:catID" element={<CatDetails />} />
         <Route path="/createCatDetails" element={<CreateCatForm />} />
+        <Route path="/updateCatDetails/:catID" element={<UpdateCatForm />} />
       </Routes>
     </Router>
   );
