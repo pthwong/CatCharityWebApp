@@ -27,6 +27,7 @@ function Header() {
       localStorage.removeItem('userEmail');
       localStorage.removeItem('token');
       localStorage.removeItem('role');
+      localStorage.removeItem("sessionExpiration");
       // Clear the username from state
       setUserEmail('');
       // Show a message that the user has been logged out
