@@ -1,7 +1,15 @@
 import { async } from "q";
 import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
-import { ThemeProvider, Container, Box, Typography, CircularProgress, Button, Grid } from '@mui/material';
+import {
+  ThemeProvider,
+  Container,
+  Box,
+  Typography,
+  CircularProgress,
+  Button,
+  Grid,
+} from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 
 import Header from "./Header";
@@ -13,13 +21,12 @@ function CatDetails() {
 
   const [catDetails, setCatDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
-  const [userRole, setUserRole] = useState('');
+  const [userEmail, setUserEmail] = useState("");
+  const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
-    setUserEmail(localStorage.getItem('userEmail'));
-    setUserRole(localStorage.getItem('role'));
-
+    setUserEmail(localStorage.getItem("userEmail"));
+    setUserRole(localStorage.getItem("role"));
   }, [userEmail, userRole]);
 
   useEffect(() => {
@@ -36,27 +43,31 @@ function CatDetails() {
   }, [catID]);
 
   const handleDelCat = async (catID) => {
-    const confirmation = window.confirm('Are you sure to delete the details of the cat?');
-  
+    const confirmation = window.confirm(
+      "Are you sure to delete the details of the cat?"
+    );
+
     if (confirmation) {
       try {
         const response = await fetch(`/v1/delCatDetails/${catID}`, {
-          method: 'DELETE'
+          method: "DELETE",
         });
-  
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-  
-        const data = await response.json();
-        console.log('Cat successfully deleted:', data);
 
-        alert('The details of the cat are successfully deleted');
-        navigate('/');
-  
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        console.log("Cat successfully deleted:", data);
+
+        alert("The details of the cat are successfully deleted");
+        navigate("/");
       } catch (error) {
-        console.error('There has been a problem with your fetch operation:', error);
-        alert('Error occured');
+        console.error(
+          "There has been a problem with your fetch operation:",
+          error
+        );
+        alert("Error occured");
       }
     }
   };
@@ -86,73 +97,90 @@ function CatDetails() {
           <CircularProgress />
         </Box>
       ) : (
-        <Container maxWidth="md" sx={{mt: 12, mb: 12}}>
-          {!catDetails ? 
-          <>
+        <Container maxWidth="md" sx={{ mt: 12, mb: 12 }}>
+          {!catDetails ? (
+            <>
               <Typography variant="h2" component="h1" gutterBottom>
-                  Cannot find the cat
-                </Typography>
-          
-          </> : 
-          <>
-           <Grid container spacing={16}>
-            <Grid item xs={12} md={6}>
-              <Box
-                component="img"
-                sx={{
-                  height: '100%',
-                  width: '100%',
-                  maxWidth: '100%',
-                  borderRadius: '5px',
-                  objectFit: 'cover',
-                }}
-                alt={catDetails.name}
-                src={`/catImage/${catDetails.catImgPath}`}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Box sx={{ my: 4 }}>
-                <Typography variant="h2" component="h1" gutterBottom>
-                  {catDetails.name}
-                </Typography>
-                <Typography variant="body1" color="text.primary" paragraph>
-                  Gender: {catDetails.gender}
-                </Typography>
-                <Typography variant="body1" color="text.primary" paragraph>
-                  Breed: {catDetails.breed}
-                </Typography>
-                <Typography variant="body1" color="text.primary" paragraph>
-                  Color: {catDetails.color}
-                </Typography>
-                <Typography variant="body1" color="text.primary" paragraph>
-                  Age: {catDetails.age} years old
-                </Typography>
-                <Typography variant="body1" color="text.primary" paragraph>
-                  Description: {catDetails.description}
-                </Typography>
+                Cannot find the cat
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Grid container spacing={16}>
+                <Grid item xs={12} md={6}>
+                  <Box
+                    component="img"
+                    sx={{
+                      height: "100%",
+                      width: "100%",
+                      maxWidth: "100%",
+                      borderRadius: "5px",
+                      objectFit: "cover",
+                    }}
+                    alt={catDetails.name}
+                    src={`/catImage/${catDetails.catImgPath}`}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ my: 4 }}>
+                    <Typography variant="h2" component="h1" gutterBottom>
+                      {catDetails.name}
+                    </Typography>
+                    <Typography variant="body1" color="text.primary" paragraph>
+                      Gender: {catDetails.gender}
+                    </Typography>
+                    <Typography variant="body1" color="text.primary" paragraph>
+                      Breed: {catDetails.breed}
+                    </Typography>
+                    <Typography variant="body1" color="text.primary" paragraph>
+                      Color: {catDetails.color}
+                    </Typography>
+                    <Typography variant="body1" color="text.primary" paragraph>
+                      Age: {catDetails.age} years old
+                    </Typography>
+                    <Typography variant="body1" color="text.primary" paragraph>
+                      Description: {catDetails.description}
+                    </Typography>
 
-                { userRole === 'cw' ?            
-                  <>
-                    <Button variant="contained" color="primary" sx={{ mt: 2 }}>
-                      Adopt {catDetails.name}
-                    </Button> 
+                    {userRole === "pub" ? (
+                      <>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          sx={{ mt: 2 }}
+                        >
+                          Save {catDetails.name} to favourite list
+                        </Button>
+                      </>
+                    ) : null}
 
-                    <Button variant="contained" color="primary" sx={{ mt: 2 }} component={Link} to={`/updateCatDetails/${catID}`} >
-                      Update cat details
-                    </Button> 
+                    {userRole === "cw" ? (
+                      <>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          sx={{ mt: 2 }}
+                          component={Link}
+                          to={`/updateCatDetails/${catID}`}
+                        >
+                          Update cat details
+                        </Button>
 
-                    <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={() => handleDelCat(catID)} >
-                      Remove the details of the cat
-                    </Button> 
-                  </>
-                  : null
-                }
-              </Box>
-            </Grid>
-          </Grid>
-          </>
-        }
-
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          sx={{ mt: 2 }}
+                          onClick={() => handleDelCat(catID)}
+                        >
+                          Remove the details of the cat
+                        </Button>
+                      </>
+                    ) : null}
+                  </Box>
+                </Grid>
+              </Grid>
+            </>
+          )}
         </Container>
       )}
       <Footer />
