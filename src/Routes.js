@@ -7,6 +7,9 @@ import PubLoginPage from "./components/PubLoginPage";
 import CwRegPage from "./components/CwRegPage";
 import CreateCatForm from "./components/CreateCatForm";
 import UpdateCatForm from "./components/UpdateCatForm";
+import PubRegPage from "./components/PubRegPage";
+import UpdatePerInfoForm from "./components/UpdatePerInfoForm";
+import CatFavouriteList from "./components/CatFavouriteList";
 
 function AppRoutes() {
   return (
@@ -17,9 +20,12 @@ function AppRoutes() {
         <Route path="/cwLogin" element={<CwLoginPage />} />
         <Route path="/cwSignup" element={<CwRegPage />} />
         <Route path="/pubLogin" element={<PubLoginPage />} />
-        <Route path="/cat/:catID" element={<CatDetails />} />
+        <Route path="/pubSignup" element={<PubRegPage />} />
+        <Route path="/:catID" element={<CatDetails />} />
+        <Route path="/settings" element={<UpdatePerInfoForm />} />
         <Route path="/createCatDetails" element={<CreateCatForm />} />
         <Route path="/updateCatDetails/:catID" element={<UpdateCatForm />} />
+        <Route path="/favourite" element={<CatFavouriteList />} />
       </Routes>
     </Router>
   );
