@@ -13,6 +13,22 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Card,
+  CardContent,
+  CardMedia,
+  Button,
+  TextField,
+  Stack,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -24,16 +40,16 @@ import Footer from "./Footer";
 function CatFavouriteList() {
   const [favouriteCats, setFavouriteCats] = useState([]);
 
-  //Search & Filter
-  //   const [searchTerm, setSearchTerm] = useState("");
-  //   const [genderFilter, setGenderFilter] = useState("");
-  //   const [ageFilter, setAgeFilter] = useState({ min: 0, max: 100 });
-  //   const [colorFilter, setColorFilter] = useState("");
-  //   const [breedFilter, setBreedFilter] = useState("");
-  //   const [filteredCatInfo, setFilteredCatInfo] = useState([]);
+  // Search & Filter
+  const [searchTerm, setSearchTerm] = useState("");
+  const [genderFilter, setGenderFilter] = useState("");
+  const [ageFilter, setAgeFilter] = useState({ min: 0, max: 100 });
+  const [colorFilter, setColorFilter] = useState("");
+  const [breedFilter, setBreedFilter] = useState("");
+  const [filteredFavourite, setFilteredFavourite] = useState([]);
 
-  //   const [selectedColors, setSelectedColors] = useState([]);
-  //   const [selectedBreeds, setSelectedBreeds] = useState([]);
+  const [selectedColors, setSelectedColors] = useState([]);
+  const [selectedBreeds, setSelectedBreeds] = useState([]);
 
   useEffect(() => {
     const fetchFavouriteCats = async () => {
@@ -57,52 +73,59 @@ function CatFavouriteList() {
     fetchFavouriteCats();
   }, []);
 
-  //   useEffect(() => {
-  //     const filterResults = catInfo.filter((cat) => {
-  //       const nameMatches = cat.name
-  //         .toLowerCase()
-  //         .includes(searchTerm.toLowerCase());
-  //       const genderMatches = !genderFilter || cat.gender === genderFilter;
-  //       const ageMatches = cat.age >= ageFilter.min && cat.age <= ageFilter.max;
-  //       const colorMatches =
-  //         !colorFilter || cat.color.toLowerCase().includes(colorFilter);
-  //       const breedMatches =
-  //         !breedFilter || cat.breed.toLowerCase().includes(breedFilter);
-  //       return (
-  //         nameMatches &&
-  //         genderMatches &&
-  //         ageMatches &&
-  //         colorMatches &&
-  //         breedMatches
-  //       );
-  //     });
-  //     setFilteredCatInfo(filterResults);
-  //   }, [searchTerm, genderFilter, ageFilter, colorFilter, breedFilter, catInfo]);
+  useEffect(() => {
+    const filterResults = favouriteCats.filter((cat) => {
+      const nameMatches = cat.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const genderMatches = !genderFilter || cat.gender === genderFilter;
+      const ageMatches = cat.age >= ageFilter.min && cat.age <= ageFilter.max;
+      const colorMatches =
+        !colorFilter || cat.color.toLowerCase().includes(colorFilter);
+      const breedMatches =
+        !breedFilter || cat.breed.toLowerCase().includes(breedFilter);
+      return (
+        nameMatches &&
+        genderMatches &&
+        ageMatches &&
+        colorMatches &&
+        breedMatches
+      );
+    });
+    setFilteredFavourite(filterResults);
+  }, [
+    searchTerm,
+    genderFilter,
+    ageFilter,
+    colorFilter,
+    breedFilter,
+    favouriteCats,
+  ]);
 
-  //   const colors = Array.from(new Set(catInfo.map((cat) => cat.color)));
-  //   const breeds = Array.from(new Set(catInfo.map((cat) => cat.breed)));
+  const colors = Array.from(new Set(favouriteCats.map((cat) => cat.color)));
+  const breeds = Array.from(new Set(favouriteCats.map((cat) => cat.breed)));
 
-  //   const handleColorChange = (event) => {
-  //     const color = event.target.value;
-  //     setSelectedColors((prevState) =>
-  //       prevState.includes(color)
-  //         ? prevState.filter((c) => c !== color)
-  //         : [...prevState, color]
-  //     );
-  //   };
+  const handleColorChange = (event) => {
+    const color = event.target.value;
+    setSelectedColors((prevState) =>
+      prevState.includes(color)
+        ? prevState.filter((c) => c !== color)
+        : [...prevState, color]
+    );
+  };
 
-  //   const handleBreedChange = (event) => {
-  //     const breed = event.target.value;
-  //     setSelectedBreeds((prevState) =>
-  //       prevState.includes(breed)
-  //         ? prevState.filter((b) => b !== breed)
-  //         : [...prevState, breed]
-  //     );
-  //   };
+  const handleBreedChange = (event) => {
+    const breed = event.target.value;
+    setSelectedBreeds((prevState) =>
+      prevState.includes(breed)
+        ? prevState.filter((b) => b !== breed)
+        : [...prevState, breed]
+    );
+  };
 
-  //   const handleSearchChange = (e) => {
-  //     setSearchTerm(e.target.value);
-  //   };
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   const theme = createTheme({
     palette: {
@@ -163,10 +186,130 @@ function CatFavouriteList() {
             >
               My favourite cats
             </Typography>
+
+            {/* Search bar */}
+            <Grid container spacing={3} mt={4}>
+              <Grid item xs={18}>
+                <TextField
+                  label="Search by Name"
+                  variant="outlined"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  fullWidth
+                  style={{ margin: "10px 0" }}
+                />
+              </Grid>
+
+              {/* Filters */}
+              <Grid item xs={18}>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>Filters</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Grid container spacing={2}>
+                      {/* Gender filter */}
+                      <Grid item xs={12} sm={6} md={3}>
+                        <FormControl variant="outlined" fullWidth>
+                          <InputLabel>Gender</InputLabel>
+                          <Select
+                            value={genderFilter}
+                            onChange={(e) => setGenderFilter(e.target.value)}
+                            label="Gender"
+                          >
+                            <MenuItem value="">All</MenuItem>
+                            <MenuItem value="Male">Male</MenuItem>
+                            <MenuItem value="Female">Female</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Grid>
+
+                      {/* Age filter */}
+                      <Grid item xs={12} sm={6} md={3}>
+                        <FormControl fullWidth>
+                          <Typography variant="body1">Age Range:</Typography>
+                          <Grid container spacing={1}>
+                            <Grid item xs={6}>
+                              <TextField
+                                type="number"
+                                label="Min Age"
+                                variant="outlined"
+                                value={ageFilter.min}
+                                inputProps={{
+                                  min: 0,
+                                  max: 30,
+                                }}
+                                onChange={(e) =>
+                                  setAgeFilter({
+                                    ...ageFilter,
+                                    min: e.target.value,
+                                  })
+                                }
+                              />
+                            </Grid>
+                            <Grid item xs={6}>
+                              <TextField
+                                type="number"
+                                label="Max Age"
+                                variant="outlined"
+                                value={ageFilter.max}
+                                inputProps={{
+                                  min: 0,
+                                  max: 30,
+                                }}
+                                onChange={(e) =>
+                                  setAgeFilter({
+                                    ...ageFilter,
+                                    max: e.target.value,
+                                  })
+                                }
+                              />
+                            </Grid>
+                          </Grid>
+                        </FormControl>
+                      </Grid>
+
+                      {/* Color filter */}
+                      <Grid item xs={12} sm={6} md={3}>
+                        <FormControl fullWidth>
+                          <TextField
+                            label="Search by Color"
+                            variant="outlined"
+                            value={colorFilter}
+                            onChange={(e) =>
+                              setColorFilter(e.target.value.toLowerCase())
+                            }
+                          />
+                        </FormControl>
+                      </Grid>
+
+                      {/* Breed filter */}
+                      <Grid item xs={12} sm={6} md={3}>
+                        <FormControl fullWidth>
+                          <TextField
+                            label="Search by Breed"
+                            variant="outlined"
+                            value={breedFilter}
+                            onChange={(e) =>
+                              setBreedFilter(e.target.value.toLowerCase())
+                            }
+                          />
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
+              </Grid>
+            </Grid>
+
             <Grid container spacing={4} style={{ width: "100%" }} mt={10}>
-              {favouriteCats.length > 0 ? (
+              {filteredFavourite.length > 0 ? (
                 <List style={{ width: "100%" }}>
-                  {favouriteCats.map((cat) => (
+                  {filteredFavourite.map((cat) => (
                     <Link
                       to={{
                         pathname: `/${cat.catID}`,
