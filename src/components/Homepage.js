@@ -33,80 +33,115 @@ import Header from "./Header";
 import Footer from "./Footer";
 
 function Homepage() {
-  const [catInfo, setCatInfo] = useState([]);
-
   const [userEmail, setUserEmail] = useState("");
   const [userRole, setUserRole] = useState("");
-
-  //Search & Filter
+  const [catInfo, setCatInfo] = useState([]);
+  const [filteredCatInfo, setFilteredCatInfo] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [genderFilter, setGenderFilter] = useState("");
   const [ageFilter, setAgeFilter] = useState({ min: 0, max: 100 });
   const [colorFilter, setColorFilter] = useState("");
   const [breedFilter, setBreedFilter] = useState("");
-  const [filteredCatInfo, setFilteredCatInfo] = useState([]);
 
-  const [selectedColors, setSelectedColors] = useState([]);
-  const [selectedBreeds, setSelectedBreeds] = useState([]);
+  const [allCatInfoFetched, setAllCatInfoFetched] = useState(false);
+
+  const [searchClicked, setSearchClicked] = useState(true); // New state
 
   useEffect(() => {
     setUserEmail(localStorage.getItem("userEmail"));
     setUserRole(localStorage.getItem("role"));
-  }, [userEmail, userRole]);
+  }, []);
+
+  const fetchCatData = (queryParams = {}) => {
+    const queryString = Object.keys(queryParams).length
+      ? "?" +
+        Object.entries(queryParams)
+          .map(([key, value]) => `${key}=${value}`)
+          .join("&")
+      : "";
+
+    console.log(queryString);
+
+    fetch(`/cats${queryString}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (!queryString) {
+          setCatInfo(data.response);
+          setAllCatInfoFetched(true);
+        }
+        setFilteredCatInfo(data.response);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  };
 
   useEffect(() => {
-    fetch("/v1/cat")
-      .then((response) => response.json())
-      .then((response) => setCatInfo(response.response))
-      .catch((error) => console.error("Error fetching data:", error));
+    fetchCatData(); // Fetch all cat data initially
   }, []);
 
   useEffect(() => {
-    const filterResults = catInfo.filter((cat) => {
-      const nameMatches = cat.name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
-      const genderMatches = !genderFilter || cat.gender === genderFilter;
-      const ageMatches = cat.age >= ageFilter.min && cat.age <= ageFilter.max;
-      const colorMatches =
-        !colorFilter || cat.color.toLowerCase().includes(colorFilter);
-      const breedMatches =
-        !breedFilter || cat.breed.toLowerCase().includes(breedFilter);
-      return (
-        nameMatches &&
-        genderMatches &&
-        ageMatches &&
-        colorMatches &&
-        breedMatches
-      );
-    });
-    setFilteredCatInfo(filterResults);
-  }, [searchTerm, genderFilter, ageFilter, colorFilter, breedFilter, catInfo]);
+    if (!searchClicked) {
+      return; // Don't fetch if the search button wasn't clicked
+    }
 
-  const colors = Array.from(new Set(catInfo.map((cat) => cat.color)));
-  const breeds = Array.from(new Set(catInfo.map((cat) => cat.breed)));
+    const queryParams = {};
 
-  const handleColorChange = (event) => {
-    const color = event.target.value;
-    setSelectedColors((prevState) =>
-      prevState.includes(color)
-        ? prevState.filter((c) => c !== color)
-        : [...prevState, color]
-    );
+    if (searchTerm) {
+      queryParams.name = searchTerm;
+    }
+    if (genderFilter) {
+      queryParams.gender = genderFilter;
+    }
+    if (colorFilter) {
+      queryParams.color = colorFilter;
+    }
+    if (breedFilter) {
+      queryParams.breed = breedFilter;
+    }
+    if (ageFilter.min || ageFilter.max) {
+      queryParams.minAge = parseInt(ageFilter.min) || 0;
+      queryParams.maxAge = parseInt(ageFilter.max) || 100;
+    }
+
+    fetchCatData(queryParams);
+
+    console.log(queryParams);
+
+    // Reset the searchClicked to false after fetching
+    setSearchClicked(false);
+  }, [
+    searchTerm,
+    genderFilter,
+    ageFilter,
+    colorFilter,
+    breedFilter,
+    searchClicked,
+  ]);
+
+  const handleSearch = () => {
+    setSearchClicked(true); // Set searchClicked state to true to trigger fetching
   };
 
-  const handleBreedChange = (event) => {
-    const breed = event.target.value;
-    setSelectedBreeds((prevState) =>
-      prevState.includes(breed)
-        ? prevState.filter((b) => b !== breed)
-        : [...prevState, breed]
-    );
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  // useEffect(() => {
+  //   const filterResults = catInfo.filter((cat) => {
+  //     const nameMatches = cat.name
+  //       .toLowerCase()
+  //       .includes(searchTerm.toLowerCase());
+  //     const genderMatches = !genderFilter || cat.gender === genderFilter;
+  //     const ageMatches = cat.age >= ageFilter.min && cat.age <= ageFilter.max;
+  //     const colorMatches =
+  //       !colorFilter || cat.color.toLowerCase().includes(colorFilter);
+  //     const breedMatches =
+  //       !breedFilter || cat.breed.toLowerCase().includes(breedFilter);
+  //     return (
+  //       nameMatches &&
+  //       genderMatches &&
+  //       ageMatches &&
+  //       colorMatches &&
+  //       breedMatches
+  //     );
+  //   });
+  //   setFilteredCatInfo(filterResults);
+  // }, [searchTerm, genderFilter, ageFilter, colorFilter, breedFilter, catInfo]);
 
   const theme = createTheme({
     palette: {
@@ -186,93 +221,80 @@ function Homepage() {
 
               {/* Search bar */}
               <Grid container spacing={3}>
-                <Grid item xs={18}>
+                <Grid item xs={12}>
                   <TextField
                     label="Search by Name"
                     variant="outlined"
                     value={searchTerm}
-                    onChange={handleSearchChange}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     fullWidth
                     style={{ margin: "10px 0" }}
                   />
                 </Grid>
 
                 {/* Filters */}
-                <Grid item xs={18}>
+                <Grid item xs={12}>
                   <Accordion>
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                    >
-                      <Typography>Filters</Typography>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                      <Typography variant="h6">Filters</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                       <Grid container spacing={2}>
-                        {/* Gender filter */}
-                        <Grid item xs={12} sm={6} md={3}>
-                          <FormControl variant="outlined" fullWidth>
-                            <InputLabel>Gender</InputLabel>
+                        <Grid item xs={12} sm={6}>
+                          <FormControl fullWidth>
+                            <InputLabel id="gender-filter-label">
+                              Gender
+                            </InputLabel>
                             <Select
+                              labelId="gender-filter-label"
                               value={genderFilter}
                               onChange={(e) => setGenderFilter(e.target.value)}
                               label="Gender"
                             >
-                              <MenuItem value="">All</MenuItem>
+                              <MenuItem value="">Any</MenuItem>
                               <MenuItem value="Male">Male</MenuItem>
                               <MenuItem value="Female">Female</MenuItem>
                             </Select>
                           </FormControl>
                         </Grid>
+                        <Grid item xs={12} sm={6}>
+                          {/* Add additional filters */}
+                          {/* For example: ageFilter, colorFilter, etc. */}
+                          <Grid item xs={6} sm={3}>
+                            <TextField
+                              label="Min Age"
+                              type="number"
+                              InputProps={{ inputProps: { min: 0 } }}
+                              value={ageFilter.min}
+                              onChange={(e) =>
+                                setAgeFilter({
+                                  ...ageFilter,
+                                  min: e.target.value,
+                                })
+                              }
+                              variant="outlined"
+                              fullWidth
+                            />
+                          </Grid>
 
-                        {/* Age filter */}
-                        <Grid item xs={12} sm={6} md={3}>
-                          <FormControl fullWidth>
-                            <Typography variant="body1">Age Range:</Typography>
-                            <Grid container spacing={1}>
-                              <Grid item xs={6}>
-                                <TextField
-                                  type="number"
-                                  label="Min Age"
-                                  variant="outlined"
-                                  value={ageFilter.min}
-                                  inputProps={{
-                                    min: 0,
-                                    max: 30,
-                                  }}
-                                  onChange={(e) =>
-                                    setAgeFilter({
-                                      ...ageFilter,
-                                      min: e.target.value,
-                                    })
-                                  }
-                                />
-                              </Grid>
-                              <Grid item xs={6}>
-                                <TextField
-                                  type="number"
-                                  label="Max Age"
-                                  variant="outlined"
-                                  value={ageFilter.max}
-                                  inputProps={{
-                                    min: 0,
-                                    max: 30,
-                                  }}
-                                  onChange={(e) =>
-                                    setAgeFilter({
-                                      ...ageFilter,
-                                      max: e.target.value,
-                                    })
-                                  }
-                                />
-                              </Grid>
-                            </Grid>
-                          </FormControl>
-                        </Grid>
+                          <Grid item xs={6} sm={3}>
+                            <TextField
+                              label="Max Age"
+                              type="number"
+                              InputProps={{ inputProps: { min: 0 } }}
+                              value={ageFilter.max}
+                              onChange={(e) =>
+                                setAgeFilter({
+                                  ...ageFilter,
+                                  max: e.target.value,
+                                })
+                              }
+                              variant="outlined"
+                              fullWidth
+                            />
+                          </Grid>
 
-                        {/* Color filter */}
-                        <Grid item xs={12} sm={6} md={3}>
-                          <FormControl fullWidth>
+                          <Grid item xs={6} sm={3}>
                             <TextField
                               label="Search by Color"
                               variant="outlined"
@@ -280,13 +302,11 @@ function Homepage() {
                               onChange={(e) =>
                                 setColorFilter(e.target.value.toLowerCase())
                               }
+                              fullWidth
                             />
-                          </FormControl>
-                        </Grid>
+                          </Grid>
 
-                        {/* Breed filter */}
-                        <Grid item xs={12} sm={6} md={3}>
-                          <FormControl fullWidth>
+                          <Grid item xs={6} sm={3}>
                             <TextField
                               label="Search by Breed"
                               variant="outlined"
@@ -294,39 +314,24 @@ function Homepage() {
                               onChange={(e) =>
                                 setBreedFilter(e.target.value.toLowerCase())
                               }
+                              fullWidth
                             />
-                          </FormControl>
+                          </Grid>
                         </Grid>
                       </Grid>
                     </AccordionDetails>
                   </Accordion>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSearch}
+                    style={{ margin: "10px 0" }}
+                  >
+                    Search
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>
-
-            {/* <FormControl fullWidth style={{ margin: '10px 0' }}>
-                  <Typography variant="body1">Colors:</Typography>
-                  <FormGroup>
-                    {colors.map(color => (
-                      <FormControlLabel
-                        control={<Checkbox value={color} onChange={handleColorChange} />}
-                        label={color}
-                      />
-                    ))}
-                  </FormGroup>
-                </FormControl>
-
-                <FormControl fullWidth style={{ margin: '10px 0' }}>
-                  <Typography variant="body1">Breeds:</Typography>
-                  <FormGroup>
-                    {breeds.map(breed => (
-                      <FormControlLabel
-                        control={<Checkbox value={breed} onChange={handleBreedChange} />}
-                        label={breed}
-                      />
-                    ))}
-                  </FormGroup>
-                </FormControl> */}
 
             <Stack
               sx={{ pt: 4 }}
@@ -338,9 +343,11 @@ function Homepage() {
         </Box>
         <Container sx={{ py: 1 }} maxWidth="md">
           <Grid container spacing={4}>
-            {filteredCatInfo.length > 0 ? (
+            {allCatInfoFetched &&
+            filteredCatInfo &&
+            filteredCatInfo.length > 0 ? (
               filteredCatInfo.map((card) => (
-                <Grid item key={card} xs={12} sm={8} md={4}>
+                <Grid item key={card.catID} xs={12} sm={8} md={4}>
                   <Link
                     to={{
                       pathname: `/${card.catID}`,

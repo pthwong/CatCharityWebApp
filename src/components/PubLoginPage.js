@@ -64,7 +64,7 @@ function PubLoginPage() {
     if (pubPassword === "" || pubEmail === "") {
       setError("Blank Email or password");
     } else {
-      const response = await fetch("v1/pubLogin", {
+      const response = await fetch("/pubLogin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

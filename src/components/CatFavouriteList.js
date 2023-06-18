@@ -55,7 +55,7 @@ function CatFavouriteList() {
     const fetchFavouriteCats = async () => {
       const email = localStorage.getItem("userEmail");
       try {
-        const response = await fetch("/v1/favourite", {
+        const response = await fetch("/favourite", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

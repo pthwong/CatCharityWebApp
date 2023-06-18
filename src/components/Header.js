@@ -27,7 +27,7 @@ function Header() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("v1/getUserInfo", {
+      const response = await fetch("/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

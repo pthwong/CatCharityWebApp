@@ -76,7 +76,7 @@ function UpdatePerInfoForm() {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const response = await fetch("v1/getUserInfo", {
+      const response = await fetch("/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -116,7 +116,7 @@ function UpdatePerInfoForm() {
     e.preventDefault();
 
     try {
-      const response = await fetch("v1/updateUserInfo", {
+      const response = await fetch("/user", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

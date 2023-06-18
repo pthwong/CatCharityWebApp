@@ -78,7 +78,7 @@ function CwRegPage() {
         return; 
     }
 
-    const response = await fetch('v1/cwRegister', {
+    const response = await fetch('/cwRegister', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

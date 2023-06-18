@@ -93,7 +93,7 @@ function CreateCatForm() {
     formData.append("cwEmail", userEmail);
 
     // Send a POST request to the backend
-    const response = await fetch("/v1/createCatDetails", {
+    const response = await fetch("/cat", {
       method: "POST",
       body: formData, // send the formData
     });

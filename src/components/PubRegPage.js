@@ -91,7 +91,7 @@ function PubRegPage() {
       return;
     }
 
-    const response = await fetch("v1/pubRegister", {
+    const response = await fetch("/pubRegister", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

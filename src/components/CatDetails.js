@@ -32,11 +32,11 @@ function CatDetails() {
   useEffect(() => {
     const fetchCatData = async () => {
       setIsLoading(true);
-      const response = await fetch(`/v1/cat/${catID}`);
+      const response = await fetch(`/cat/${catID}`);
       const data = await response.json();
-      console.log(data.response);
-      setCatDetails(data.response[0]);
-      console.log(data.response[0].catImgPath);
+      console.log(data[0]);
+      setCatDetails(data[0]);
+      console.log(data[0].catImgPath);
       setIsLoading(false);
     };
     fetchCatData();
