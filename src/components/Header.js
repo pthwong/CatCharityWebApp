@@ -27,12 +27,10 @@ function Header() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem("token");
       const response = await fetch("/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${token}`, // Add the JWT to the Authorization header
         },
         body: JSON.stringify({
           email: userEmail,
@@ -112,14 +110,12 @@ function Header() {
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
         <Tabs centered>
-          {/* <Tab label="Home" component={Link} to="/" />
-          <Tab label="Contact" component={Link} to="/contact" /> */}
           <Tab label="Home" component={Link} to="/" />
           <Tab label="Contact" />
         </Tabs>
         <Box sx={{ flexGrow: 1 }} />
 
-        {userEmail ? (
+        {userEmail && name ? (
           <>
             <Button
               aria-controls="user-menu"

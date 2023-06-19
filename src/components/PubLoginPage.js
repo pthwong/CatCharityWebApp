@@ -34,16 +34,16 @@ const theme = createTheme({
           },
         },
         input: {
-          color: "#000000", // input text color
+          color: "#000000",
         },
       },
     },
     MuiInputLabel: {
       styleOverrides: {
         outlined: {
-          color: "#000000", // label color
+          color: "#000000",
           "&.Mui-focused": {
-            color: "#000000", // label color when input is focused
+            color: "#000000",
           },
         },
       },
@@ -55,7 +55,7 @@ function PubLoginPage() {
   const [pubEmail, setPubEmail] = useState("");
   const [pubPassword, setPubPassword] = useState("");
   const navigate = useNavigate();
-  const [error, setError] = useState(""); // Add this line
+  const [error, setError] = useState("");
 
   let inactivityTimeout;
 

@@ -24,7 +24,7 @@ function LoginPage() {
     <>
     <ThemeProvider theme={theme}>
     <Header />
-    <Grid container justifyContent="center" spacing={2}>
+    <Grid container justifyContent="center" spacing={2} mt={10} mb={10}>
         <Typography variant="body1" color="text.primary" paragraph>
         Choose a role:
         </Typography>

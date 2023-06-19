@@ -150,16 +150,16 @@ function CatFavouriteList() {
             },
           },
           input: {
-            color: "#000000", // input text color
+            color: "#000000",
           },
         },
       },
       MuiInputLabel: {
         styleOverrides: {
           outlined: {
-            color: "#000000", // label color
+            color: "#000000",
             "&.Mui-focused": {
-              color: "#000000", // label color when input is focused
+              color: "#000000",
             },
           },
         },
@@ -309,7 +309,7 @@ function CatFavouriteList() {
             </Grid>
 
             <Grid container spacing={4} style={{ width: "100%" }} mt={10}>
-              {filteredFavourite.length > 0 ? (
+              {filteredFavourite && filteredFavourite.length > 0 ? (
                 <List style={{ width: "100%" }}>
                   {filteredFavourite.map((cat) => (
                     <Link
@@ -335,7 +335,7 @@ function CatFavouriteList() {
                             variant="rounded"
                             src={`catImage/${cat.catImgPath}`}
                             alt={cat.name}
-                            sx={{ width: 80, height: 80, marginRight: 3 }} // Increase the size of the Avatar and add margin to the right
+                            sx={{ width: 80, height: 80, marginRight: 3 }}
                           />
                         </ListItemAvatar>
                         <ListItemText

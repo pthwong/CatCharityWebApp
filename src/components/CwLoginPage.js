@@ -34,16 +34,16 @@ const theme = createTheme({
           },
         },
         input: {
-          color: "#000000", // input text color
+          color: "#000000",
         },
       },
     },
     MuiInputLabel: {
       styleOverrides: {
         outlined: {
-          color: "#000000", // label color
+          color: "#000000",
           "&.Mui-focused": {
-            color: "#000000", // label color when input is focused
+            color: "#000000",
           },
         },
       },

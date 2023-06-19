@@ -89,7 +89,7 @@ function CreateCatForm() {
     formData.append("color", color);
     formData.append("breed", breed);
     formData.append("description", description);
-    formData.append("catImage", catImage); // This is the file we want to upload
+    formData.append("catImage", catImage);
     formData.append("cwEmail", userEmail);
 
     const token = localStorage.getItem("token");
@@ -193,12 +193,6 @@ function CreateCatForm() {
                       </label>
                     )}
                   </Box>
-                  {/* 
-              <label htmlFor="contained-button-file">
-                <Button variant="contained" color="primary" component="span" style={{ marginTop: '16px' }}>
-                  Upload Cat Image
-                </Button>
-              </label> */}
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Grid item xs={12}>

@@ -115,8 +115,8 @@ function UpdatePerInfoForm() {
   }, [userEmail, userRole]);
 
   const handleUpdateInfo = async (e) => {
-    e.preventDefault();
     const token = localStorage.getItem("token");
+    e.preventDefault();
     try {
       const response = await fetch("/user", {
         method: "PUT",
