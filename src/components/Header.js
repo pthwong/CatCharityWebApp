@@ -27,10 +27,12 @@ function Header() {
 
   useEffect(() => {
     const fetchData = async () => {
+      const token = localStorage.getItem("token");
       const response = await fetch("/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${token}`, // Add the JWT to the Authorization header
         },
         body: JSON.stringify({
           email: userEmail,

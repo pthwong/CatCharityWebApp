@@ -119,6 +119,8 @@ function UpdateCatForm() {
       return;
     }
 
+    const token = localStorage.getItem("token");
+
     // Create a FormData instance
     const formData = new FormData();
 
@@ -135,6 +137,9 @@ function UpdateCatForm() {
     // Send a PUT request to the backend for updating details
     const response = await fetch(`/cat/${catID}`, {
       method: "PUT",
+      headers: {
+        authorization: `Bearer ${token}`, // Add the JWT to the Authorization header
+      },
       body: formData, // send the formData
     });
 

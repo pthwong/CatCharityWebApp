@@ -92,9 +92,14 @@ function CreateCatForm() {
     formData.append("catImage", catImage); // This is the file we want to upload
     formData.append("cwEmail", userEmail);
 
+    const token = localStorage.getItem("token");
+
     // Send a POST request to the backend
     const response = await fetch("/cat", {
       method: "POST",
+      headers: {
+        authorization: `Bearer ${token}`, // Add the JWT to the Authorization header
+      },
       body: formData, // send the formData
     });
 

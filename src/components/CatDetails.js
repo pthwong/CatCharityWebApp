@@ -47,10 +47,15 @@ function CatDetails() {
       "Are you sure to delete the details of the cat?"
     );
 
+    const token = localStorage.getItem("token");
+
     if (confirmation) {
       try {
-        const response = await fetch(`/v1/delCatDetails/${catID}`, {
+        const response = await fetch(`/cat/${catID}`, {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the JWT to the Authorization header
+          },
         });
 
         if (!response.ok) {

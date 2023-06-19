@@ -76,10 +76,12 @@ function UpdatePerInfoForm() {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
+      const token = localStorage.getItem("token");
       const response = await fetch("/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${token}`, // Add the JWT to the Authorization header
         },
         body: JSON.stringify({
           email: userEmail,
@@ -114,12 +116,13 @@ function UpdatePerInfoForm() {
 
   const handleUpdateInfo = async (e) => {
     e.preventDefault();
-
+    const token = localStorage.getItem("token");
     try {
       const response = await fetch("/user", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${token}`, // Add the JWT to the Authorization header
         },
         body: JSON.stringify({
           name: name,
