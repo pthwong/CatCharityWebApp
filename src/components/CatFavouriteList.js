@@ -54,11 +54,13 @@ function CatFavouriteList() {
   useEffect(() => {
     const fetchFavouriteCats = async () => {
       const email = localStorage.getItem("userEmail");
+      const token = localStorage.getItem("token");
       try {
         const response = await fetch("/favourite", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`, // Add the JWT to the Authorization header
           },
           body: JSON.stringify({ pubEmail: email }),
         });
